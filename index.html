@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WordWise — English Learning Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F5EFE0;--warm:#FDFAF4;--ink:#1A1208;
+  --amber:#C8843A;--amber-light:#E8A85C;--amber-pale:#FEF3E4;
+  --forest:#2C4A3E;--forest-light:#3D6B5C;--forest-pale:#E8F4EC;
+  --muted:#7A6A56;--card:#FFFDF7;
+  --red:#D14343;--green:#2C8A50;
+}
+html{scroll-behavior:smooth}
+body{background:var(--warm);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--cream)}::-webkit-scrollbar-thumb{background:var(--amber);border-radius:3px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(253,250,244,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,132,58,.15);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 4px 30px rgba(26,18,8,.08)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--forest);letter-spacing:-.02em;cursor:pointer}
+.nav-logo span{color:var(--amber)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:400;transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:var(--amber)}
+.nav-right{display:flex;gap:.8rem;align-items:center}
+.btn-login{background:transparent;border:1.5px solid var(--forest);color:var(--forest);padding:.55rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-login:hover{background:var(--forest);color:var(--cream)}
+.btn-nav-cta{background:var(--amber);color:#fff;border:none;padding:.6rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-nav-cta:hover{background:var(--amber-light);transform:translateY(-1px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.hamburger span{width:22px;height:2px;background:var(--ink);display:block;transition:all .3s}
+
+/* MOBILE MENU */
+.mobile-menu{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--warm);z-index:190;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transform:translateX(-100%);transition:transform .4s cubic-bezier(.77,0,.18,1)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;text-decoration:none;color:var(--ink);transition:color .2s;cursor:pointer}
+.mobile-menu a:hover{color:var(--amber)}
+
+/* HERO */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 5%;padding-top:80px;position:relative;overflow:hidden;gap:4rem}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 70% 50%,rgba(200,132,58,.07) 0%,transparent 70%);pointer-events:none}
+.hero-text{animation:fadeUp .9s ease both}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--amber);color:#fff;font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:.35rem .9rem;margin-bottom:1.8rem;border-radius:1px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,4.5vw,4.6rem);font-weight:900;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem}
+.hero h1 em{font-style:italic;color:var(--amber)}
+.hero p{font-size:1.05rem;line-height:1.75;color:var(--muted);max-width:460px;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(--amber);color:#fff;padding:.9rem 2rem;border:none;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;border-radius:2px;letter-spacing:.03em;transition:all .2s;display:inline-block;text-decoration:none}
+.btn-primary:hover{background:var(--amber-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,132,58,.3)}
+.btn-ghost{background:transparent;color:var(--forest);padding:.9rem 2rem;border:1.5px solid var(--forest);font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;border-radius:2px;letter-spacing:.03em;transition:all .2s;display:inline-block}
+.btn-ghost:hover{background:var(--forest);color:var(--cream)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(26,18,8,.1)}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--forest);display:block}
+.stat-label{font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+.hero-visual{display:flex;justify-content:center;align-items:center;position:relative;height:520px;animation:fadeUp .9s .2s ease both}
+.book-card{background:var(--card);border:1px solid rgba(200,132,58,.2);border-radius:4px;padding:2rem;box-shadow:0 20px 60px rgba(26,18,8,.1);max-width:300px;width:100%;position:relative}
+.book-card::before{content:'❝';font-family:'Playfair Display',serif;font-size:5rem;line-height:1;color:var(--amber);opacity:.2;position:absolute;top:.5rem;left:1rem}
+.book-card blockquote{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;line-height:1.65;color:var(--ink);margin-bottom:1rem;padding-top:1.5rem}
+.book-card cite{font-size:.8rem;color:var(--muted);letter-spacing:.05em;font-style:normal}
+.floating-badge{position:absolute;background:var(--forest);color:var(--cream);padding:.8rem 1.2rem;border-radius:3px;font-size:.78rem;font-weight:500;box-shadow:0 8px 24px rgba(44,74,62,.3)}
+.badge-1{top:60px;right:-10px;animation:float 4s ease-in-out infinite}
+.badge-2{bottom:80px;left:-20px;animation:float 4s 1.5s ease-in-out infinite}
+.badge-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;display:block}
+
+/* TICKER */
+.ticker{background:var(--forest);color:var(--cream);padding:.8rem 0;overflow:hidden}
+.ticker-inner{display:flex;gap:4rem;animation:ticker 28s linear infinite;white-space:nowrap}
+.ticker-item{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:400}
+.ticker-dot{color:var(--amber-light);margin:0 2rem}
+
+/* SECTIONS */
+.section{padding:6rem 5%}
+.section-label{font-size:.72rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:.8rem}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;line-height:1.15;letter-spacing:-.01em;margin-bottom:1rem}
+.section-subtitle{color:var(--muted);font-size:1rem;line-height:1.7;max-width:500px;margin-bottom:3.5rem}
+
+/* COURSES */
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.course-card{background:var(--card);border:1px solid rgba(200,132,58,.15);border-radius:3px;padding:2rem;transition:all .3s;cursor:pointer;position:relative;overflow:hidden}
+.course-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:var(--amber);transition:width .3s}
+.course-card:hover{box-shadow:0 12px 40px rgba(26,18,8,.1);transform:translateY(-4px)}
+.course-card:hover::after{width:100%}
+.course-icon{font-size:2rem;margin-bottom:1rem}
+.course-level{display:inline-block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:.25rem .7rem;border-radius:1px;margin-bottom:.8rem}
+.level-beginner{background:var(--forest-pale);color:#2C6E4A}
+.level-intermediate{background:var(--amber-pale);color:#A0622A}
+.level-advanced{background:#EDE8F5;color:#5B3D8A}
+.course-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:.6rem;line-height:1.3}
+.course-card p{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:1.2rem}
+.course-meta{display:flex;gap:1rem;font-size:.78rem;color:var(--muted);margin-bottom:1.2rem;flex-wrap:wrap}
+.course-enroll{width:100%;background:var(--forest);color:var(--cream);border:none;padding:.7rem;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;border-radius:2px;transition:all .2s}
+.course-enroll:hover{background:var(--forest-light)}
+.course-enroll.free{background:var(--amber)}
+.course-enroll.free:hover{background:var(--amber-light)}
+
+/* FEATURES */
+.features{background:var(--forest);padding:6rem 5%}
+.features .section-label{color:var(--amber-light)}
+.features .section-title{color:var(--cream)}
+.features .section-subtitle{color:rgba(245,239,224,.6)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:2rem}
+.feature-item{padding:1.5rem 0;border-top:1px solid rgba(245,239,224,.15)}
+.feature-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--amber);opacity:.5;line-height:1;margin-bottom:.5rem}
+.feature-item h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--cream);margin-bottom:.5rem}
+.feature-item p{font-size:.85rem;color:rgba(245,239,224,.55);line-height:1.6}
+
+/* LESSONS */
+.lessons{padding:6rem 5%;background:var(--cream)}
+.lessons-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start}
+.lesson-list{display:flex;flex-direction:column}
+.lesson-item{display:flex;gap:1.2rem;align-items:flex-start;padding:1.2rem 0;border-bottom:1px solid rgba(26,18,8,.08);cursor:pointer;transition:all .2s}
+.lesson-item:hover .lesson-num,.lesson-item.active .lesson-num{color:var(--amber)}
+.lesson-item.active{padding-left:.8rem;border-left:3px solid var(--amber)}
+.lesson-num{font-family:'Playfair Display',serif;font-size:.85rem;font-weight:700;color:var(--muted);min-width:28px;transition:color .2s}
+.lesson-info h5{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:.3rem}
+.lesson-info p{font-size:.82rem;color:var(--muted)}
+.lesson-duration{margin-left:auto;font-size:.78rem;color:var(--muted);white-space:nowrap}
+.lesson-preview{background:var(--card);border-radius:4px;padding:2.5rem;border:1px solid rgba(200,132,58,.15);box-shadow:0 20px 60px rgba(26,18,8,.08);position:sticky;top:100px}
+.preview-tag{background:var(--amber);color:#fff;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;padding:.3rem .8rem;border-radius:1px;display:inline-block;margin-bottom:1rem}
+.preview-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:.8rem;line-height:1.3}
+.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0}
+.vocab-item{background:var(--cream);border-radius:2px;padding:.8rem;border-left:3px solid var(--amber);cursor:pointer;transition:all .2s}
+.vocab-item:hover{transform:translateX(3px);box-shadow:0 4px 12px rgba(200,132,58,.15)}
+.vocab-word{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700}
+.vocab-def{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-style:italic}
+.vocab-example{font-size:.72rem;color:var(--forest);margin-top:.3rem;display:none;font-weight:500}
+.vocab-item.expanded .vocab-example{display:block}
+.quiz-section{margin-top:1.5rem;border-top:1px solid rgba(200,132,58,.2);padding-top:1.5rem}
+.quiz-label{font-size:.72rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--amber);margin-bottom:1rem}
+.quiz-q{font-size:.9rem;line-height:1.8;margin-bottom:1rem;font-family:'Playfair Display',serif;font-style:italic}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.quiz-opt{background:var(--cream);border:1.5px solid transparent;border-radius:2px;padding:.65rem 1rem;font-size:.85rem;cursor:pointer;transition:all .2s;text-align:left;font-family:'DM Sans',sans-serif}
+.quiz-opt:hover:not(:disabled){border-color:var(--amber);background:var(--amber-pale)}
+.quiz-opt.correct{border-color:var(--green)!important;background:#E8F4EC!important;color:var(--green)}
+.quiz-opt.wrong{border-color:var(--red)!important;background:#FDE8E8!important;color:var(--red)}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{font-size:.82rem;padding:.6rem .8rem;border-radius:2px;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#E8F4EC;color:var(--green)}
+.quiz-feedback.wrong{background:#FDE8E8;color:var(--red)}
+.quiz-next{margin-top:1rem;background:var(--forest);color:var(--cream);border:none;padding:.6rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;border-radius:2px;display:none}
+.quiz-next.show{display:inline-block}
+.quiz-next:hover{background:var(--forest-light)}
+
+/* WOD */
+.wod-widget{background:linear-gradient(135deg,var(--forest) 0%,#1A3329 100%);border-radius:3px;padding:1.5rem;color:var(--cream);margin-top:2rem}
+.wod-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-light);margin-bottom:.5rem}
+.wod-word{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;line-height:1}
+.wod-phonetic{font-size:.8rem;opacity:.5;margin:.3rem 0}
+.wod-def{font-size:.85rem;opacity:.7;line-height:1.5;margin-top:.5rem;font-style:italic}
+.wod-next{margin-top:.8rem;background:none;border:1px solid rgba(245,239,224,.2);color:var(--cream);font-size:.75rem;padding:.4rem .9rem;cursor:pointer;border-radius:1px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.wod-next:hover{background:rgba(245,239,224,.1)}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;max-width:960px}
+.price-card{background:var(--card);border:1px solid rgba(200,132,58,.15);border-radius:3px;padding:2.5rem;position:relative;transition:all .3s}
+.price-card.featured{background:var(--forest);border-color:var(--forest)}
+.price-card.featured .price-plan,.price-card.featured .price-desc,.price-card.featured .price-features li{color:rgba(245,239,224,.7)!important}
+.price-card.featured .price-amount,.price-card.featured h3,.price-card.featured .price-features li::before{color:var(--cream)!important}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--amber);color:#fff;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .9rem;border-radius:10px;font-weight:500;white-space:nowrap}
+.price-plan{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;color:var(--muted);margin-bottom:.8rem}
+.price-amount{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1;margin-bottom:.3rem}
+.price-amount sup{font-size:1.2rem;font-weight:400;margin-right:.2rem}
+.price-amount sub{font-size:.9rem;font-weight:300}
+.price-desc{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.5}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+.price-features li{font-size:.85rem;display:flex;gap:.6rem;align-items:flex-start}
+.price-features li::before{content:'✓';color:var(--amber);font-weight:700;flex-shrink:0;margin-top:.05rem}
+.price-card.featured .price-features li::before{color:var(--amber-light)}
+.btn-plan{width:100%;padding:.85rem;border:none;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;border-radius:2px;transition:all .2s}
+.btn-plan-outline{background:transparent;border:1.5px solid var(--forest);color:var(--forest)}
+.btn-plan-outline:hover{background:var(--forest);color:var(--cream)}
+.btn-plan-filled{background:var(--amber);color:#fff}
+.btn-plan-filled:hover{background:var(--amber-light)}
+.btn-plan-white{background:var(--cream);color:var(--forest)}
+.btn-plan-white:hover{background:#fff}
+
+/* TESTIMONIALS */
+.testimonials{padding:6rem 5%;background:var(--cream)}
+.test-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.5rem}
+.test-card{background:var(--card);border:1px solid rgba(200,132,58,.12);border-radius:3px;padding:2rem}
+.test-stars{color:var(--amber);font-size:.9rem;margin-bottom:1rem;letter-spacing:2px}
+.test-card blockquote{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;line-height:1.7;margin-bottom:1.2rem;color:var(--ink)}
+.test-author{display:flex;align-items:center;gap:.8rem}
+.test-avatar{width:40px;height:40px;border-radius:50%;color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;flex-shrink:0}
+.test-name{font-size:.85rem;font-weight:500}
+.test-role{font-size:.75rem;color:var(--muted)}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.faq-list{display:flex;flex-direction:column}
+.faq-item{border-bottom:1px solid rgba(26,18,8,.1);overflow:hidden}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 0;cursor:pointer;font-family:'DM Serif Display',serif;font-size:1rem;gap:1rem;transition:color .2s;background:none;border:none;width:100%;text-align:left;color:var(--ink)}
+.faq-q:hover{color:var(--amber)}
+.faq-toggle{font-size:1.2rem;flex-shrink:0;transition:transform .3s;color:var(--amber)}
+.faq-item.open .faq-toggle{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:.88rem;color:var(--muted);line-height:1.7}
+.faq-a-inner{padding-bottom:1rem}
+.contact-form{background:var(--card);border:1px solid rgba(200,132,58,.15);border-radius:3px;padding:2.5rem}
+.contact-form h3{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
+.contact-form p{font-size:.88rem;color:var(--muted);margin-bottom:1.5rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.form-group label{font-size:.78rem;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.form-input{background:var(--cream);border:1.5px solid rgba(200,132,58,.2);padding:.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);border-radius:2px;outline:none;transition:border-color .2s;width:100%}
+.form-input:focus{border-color:var(--amber)}
+.form-textarea{resize:vertical;min-height:100px}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A6A56' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;background-color:var(--cream);padding-right:2.5rem;cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-success{background:var(--forest-pale);border:1px solid var(--green);border-radius:2px;padding:1rem;font-size:.88rem;color:var(--green);display:none;align-items:center;gap:.6rem;margin-top:1rem}
+.form-success.show{display:flex}
+
+/* CTA */
+.cta-section{background:linear-gradient(135deg,var(--forest) 0%,#1A3329 100%);padding:7rem 5%;text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(200,132,58,.12) 0%,transparent 70%)}
+.cta-section .section-label{color:var(--amber-light)}
+.cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:900;color:var(--cream);line-height:1.1;margin-bottom:1.2rem}
+.cta-section h2 em{font-style:italic;color:var(--amber-light)}
+.cta-section p{color:rgba(245,239,224,.6);max-width:460px;margin:0 auto 2.5rem;line-height:1.7}
+.cta-form{display:flex;gap:1rem;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.cta-input{flex:1;min-width:220px;background:rgba(255,255,255,.1);border:1px solid rgba(245,239,224,.25);color:var(--cream);padding:.9rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:.9rem;border-radius:2px;outline:none;transition:border-color .2s}
+.cta-input::placeholder{color:rgba(245,239,224,.4)}
+.cta-input:focus{border-color:var(--amber-light)}
+.cta-success{color:var(--amber-light);margin-top:1rem;font-size:.88rem;display:none}
+.cta-success.show{display:block}
+
+/* FOOTER */
+footer{background:var(--ink);color:var(--cream);padding:4rem 5% 2rem}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-brand p{font-size:.85rem;color:rgba(245,239,224,.5);line-height:1.7;margin-top:.8rem;max-width:260px}
+.footer-social{display:flex;gap:.8rem;margin-top:1.2rem}
+.social-btn{width:34px;height:34px;border-radius:50%;background:rgba(245,239,224,.1);border:1px solid rgba(245,239,224,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.8rem;transition:all .2s;color:var(--cream);font-weight:600}
+.social-btn:hover{background:var(--amber);border-color:var(--amber)}
+.footer-col h6{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--amber);margin-bottom:1rem}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-col a{color:rgba(245,239,224,.5);text-decoration:none;font-size:.85rem;transition:color .2s;cursor:pointer}
+.footer-col a:hover{color:var(--cream)}
+.footer-bottom{border-top:1px solid rgba(245,239,224,.1);padding-top:1.5rem;display:flex;justify-content:space-between;font-size:.78rem;color:rgba(245,239,224,.35);flex-wrap:wrap;gap:.5rem}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,18,8,.6);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);padding:1rem}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--warm);border-radius:4px;padding:3rem;max-width:480px;width:100%;position:relative;transform:translateY(20px);transition:transform .3s;max-height:90vh;overflow-y:auto}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-close{position:absolute;top:1.2rem;right:1.2rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);line-height:1;transition:color .2s}
+.modal-close:hover{color:var(--ink)}
+.modal-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--forest);margin-bottom:.3rem}
+.modal-logo span{color:var(--amber)}
+.modal h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:.4rem}
+.modal p.sub{font-size:.88rem;color:var(--muted);margin-bottom:2rem}
+.modal-tabs{display:flex;margin-bottom:2rem;border-bottom:1px solid rgba(200,132,58,.2)}
+.modal-tab{padding:.7rem 1.5rem;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.modal-tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+.modal-form{display:none}
+.modal-form.active{display:block}
+.modal-divider{text-align:center;margin:1rem 0;font-size:.8rem;color:var(--muted);position:relative}
+.modal-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(200,132,58,.2)}
+.modal-divider span{background:var(--warm);position:relative;padding:0 .8rem}
+.modal-submit{width:100%;margin-top:1rem}
+.modal-note{text-align:center;font-size:.78rem;color:var(--muted);margin-top:1rem}
+.modal-note a{color:var(--amber);text-decoration:none;cursor:pointer}
+.forgot-link{font-size:.78rem;color:var(--amber);text-decoration:none;text-align:right;display:block;margin-top:.3rem;cursor:pointer}
+.pw-wrap{position:relative}
+.toggle-pw{position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:.85rem;padding:0}
+
+/* COURSE DETAIL MODAL */
+.course-modal .modal{max-width:620px}
+.course-modal-hdr{background:var(--forest);margin:-3rem -3rem 2rem;padding:2.5rem 3rem;border-radius:4px 4px 0 0;color:var(--cream)}
+.cmd-tag{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber-light);margin-bottom:.5rem}
+.cmd-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700}
+.cmd-meta{display:flex;gap:1.5rem;margin-top:.8rem;font-size:.82rem;opacity:.7;flex-wrap:wrap}
+.syllabus{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin:1rem 0 1.5rem}
+.syllabus li{display:flex;align-items:center;gap:.8rem;font-size:.88rem;padding:.5rem 0;border-bottom:1px solid rgba(200,132,58,.1)}
+.syllabus-num{font-size:.72rem;color:var(--muted);min-width:45px;font-weight:500}
+.progress-bar{background:rgba(200,132,58,.15);border-radius:4px;height:6px;margin:1rem 0}
+.progress-fill{background:var(--amber);height:100%;border-radius:4px;width:0%;transition:width 1s ease}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--forest);color:var(--cream);padding:1rem 1.5rem;border-radius:3px;font-size:.88rem;transform:translateY(100px);opacity:0;transition:all .4s;z-index:500;max-width:300px;box-shadow:0 8px 30px rgba(26,18,8,.2)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-title{font-weight:500;margin-bottom:.2rem}
+.toast-msg{font-size:.78rem;opacity:.7}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;padding-top:100px}
+  .hero-visual{display:none}
+  .lessons-layout{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .faq-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .btn-login{display:none}
+  .hamburger{display:flex}
+}
+@media(max-width:600px){
+  .footer-top{grid-template-columns:1fr}
+  .hero-stats{gap:1.5rem}
+  .pricing-grid{grid-template-columns:1fr}
+  .price-card.featured{transform:none}
+  .modal{padding:2rem}
+  .course-modal-hdr{margin:-2rem -2rem 1.5rem;padding:2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><div class="toast-title" id="toastTitle"></div><div class="toast-msg" id="toastMsg"></div></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="navGo('courses')">Courses</a>
+  <a onclick="navGo('lessons')">Lessons</a>
+  <a onclick="navGo('pricing')">Pricing</a>
+  <a onclick="navGo('faq')">FAQ</a>
+  <a onclick="navGo('contact')">Contact</a>
+  <a onclick="openAuth('signup')" style="color:var(--amber)">Sign Up Free →</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">Word<span>Wise</span></div>
+  <ul class="nav-links">
+    <li><a onclick="navGo('courses')">Courses</a></li>
+    <li><a onclick="navGo('lessons')">Lessons</a></li>
+    <li><a onclick="navGo('pricing')">Pricing</a></li>
+    <li><a onclick="navGo('faq')">FAQ</a></li>
+    <li><a onclick="navGo('contact')">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-login" onclick="openAuth('login')">Log In</button>
+    <button class="btn-nav-cta" onclick="openAuth('signup')">Start Free Trial</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="hero-tag">✦ English Language Academy</span>
+    <h1>Learn English with <em>Confidence</em> &amp; Clarity</h1>
+    <p>From grammar foundations to advanced academic writing, WordWise helps you speak, read, and write English beautifully — at your own pace.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openAuth('signup')">Explore Courses — It's Free →</button>
+      <button class="btn-ghost" onclick="navGo('lessons')">Preview a Lesson</button>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-num">2,400+</span><span class="stat-label">Active Learners</span></div>
+      <div><span class="stat-num">98%</span><span class="stat-label">Satisfaction Rate</span></div>
+      <div><span class="stat-num">40+</span><span class="stat-label">Courses Available</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="book-card">
+      <blockquote>"The limits of my language mean the limits of my world."</blockquote>
+      <cite>— Ludwig Wittgenstein</cite>
+    </div>
+    <div class="floating-badge badge-1"><span class="badge-num">2,400+</span>Active learners</div>
+    <div class="floating-badge badge-2"><span class="badge-num">98%</span>Satisfaction rate</div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ticker-inner">
+  <span class="ticker-item">Grammar Mastery<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Creative Writing<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Phonics &amp; Pronunciation<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Vocabulary Building<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Reading Comprehension<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">IELTS Preparation<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Business English<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Academic Writing<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Grammar Mastery<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Creative Writing<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Phonics &amp; Pronunciation<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Vocabulary Building<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Reading Comprehension<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">IELTS Preparation<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Business English<span class="ticker-dot"> ✦ </span></span>
+  <span class="ticker-item">Academic Writing<span class="ticker-dot"> ✦ </span></span>
+</div></div>
+
+<!-- COURSES -->
+<section class="section" id="courses">
+  <div class="section-label reveal">✦ What We Offer</div>
+  <h2 class="section-title reveal">Courses for Every Level</h2>
+  <p class="section-subtitle reveal">Whether you're just starting out or polishing your prose, we have a course perfectly suited for you.</p>
+  <div class="courses-grid" id="coursesGrid"></div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-label reveal">✦ Why WordWise</div>
+  <h2 class="section-title reveal" style="color:var(--cream)">Built for Serious Learners</h2>
+  <p class="section-subtitle reveal">Our approach combines proven linguistics research with modern, engaging learning design.</p>
+  <div class="features-grid">
+    <div class="feature-item reveal"><div class="feature-num">01</div><h4>Expert-Designed Curriculum</h4><p>Content crafted by certified English educators with 10+ years of classroom and online teaching experience.</p></div>
+    <div class="feature-item reveal"><div class="feature-num">02</div><h4>Interactive Exercises</h4><p>Fill-in-the-blank, multiple choice, and speaking exercises that actively reinforce every concept you learn.</p></div>
+    <div class="feature-item reveal"><div class="feature-num">03</div><h4>Progress Tracking</h4><p>Clear dashboards show your daily streak, accuracy score, and areas that need extra attention and practice.</p></div>
+    <div class="feature-item reveal"><div class="feature-num">04</div><h4>Community &amp; Live Sessions</h4><p>Submit writing for peer feedback and join weekly live sessions with our experienced instructors every Saturday.</p></div>
+  </div>
+</section>
+
+<!-- LESSONS PREVIEW -->
+<section class="lessons" id="lessons">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:3rem">
+    <div><div class="section-label reveal">✦ Interactive Lesson Preview</div><h2 class="section-title reveal">See How We Teach</h2></div>
+    <button class="btn-ghost reveal" onclick="openAuth('signup')">View All Lessons →</button>
+  </div>
+  <div class="lessons-layout">
+    <div>
+      <div class="lesson-list" id="lessonList"></div>
+      <div class="wod-widget">
+        <div class="wod-label">✦ Word of the Day</div>
+        <div class="wod-word" id="wodWord">Eloquent</div>
+        <div class="wod-phonetic" id="wodPhon">/ˈel.ə.kwənt/</div>
+        <div class="wod-def" id="wodDef">(adj.) fluent and persuasive in speaking or writing. "She delivered an eloquent speech."</div>
+        <button class="wod-next" onclick="nextWord()">Next Word →</button>
+      </div>
+    </div>
+    <div class="lesson-preview" id="lessonPreview"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-label reveal">✦ Simple Pricing</div>
+  <h2 class="section-title reveal">Choose Your Plan</h2>
+  <p class="section-subtitle reveal">Start free, upgrade when you're ready. No hidden fees, cancel anytime.</p>
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-plan">Starter</div>
+      <div class="price-amount"><sup>$</sup>0<sub>/month</sub></div>
+      <div class="price-desc">Perfect for exploring English learning at your own pace with no commitment.</div>
+      <ul class="price-features">
+        <li>Access to 2 free courses</li><li>Basic vocabulary exercises</li><li>Word of the Day</li><li>Community forum access</li><li>Progress tracking dashboard</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline" onclick="openAuth('signup')">Get Started Free</button>
+    </div>
+    <div class="price-card featured reveal">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-plan">Pro</div>
+      <div class="price-amount"><sup>$</sup>19<sub>/month</sub></div>
+      <div class="price-desc">Everything you need to reach intermediate to advanced fluency fast.</div>
+      <ul class="price-features">
+        <li>All 40+ courses unlocked</li><li>Interactive quizzes &amp; exercises</li><li>Weekly live group sessions</li><li>Writing feedback from teachers</li><li>IELTS/TOEFL practice tests</li><li>Downloadable lesson PDFs</li><li>Completion certificates</li><li>Priority email support</li>
+      </ul>
+      <button class="btn-plan btn-plan-white" onclick="toast('Pro Plan','Starting your 7-day free trial — no credit card needed.')">Start 7-Day Free Trial</button>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-plan">Teacher</div>
+      <div class="price-amount"><sup>$</sup>49<sub>/month</sub></div>
+      <div class="price-desc">Ideal for educators who want to use WordWise in their classroom.</div>
+      <ul class="price-features">
+        <li>Everything in Pro</li><li>Up to 30 student accounts</li><li>Class progress dashboard</li><li>Custom assignment creator</li><li>Printable worksheets &amp; PDFs</li><li>1-on-1 onboarding call</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline" onclick="toast('Teacher Plan','Great choice! Redirecting to checkout...')">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-label reveal">✦ Student Stories</div>
+  <h2 class="section-title reveal">Words from Our Learners</h2>
+  <p class="section-subtitle reveal">Real students sharing how WordWise changed the way they communicate.</p>
+  <div class="test-grid">
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><blockquote>"I went from barely writing a paragraph to submitting a full academic essay in just 3 months. The structured approach really works."</blockquote><div class="test-author"><div class="test-avatar" style="background:#2C4A3E">M</div><div><div class="test-name">Maria Santos</div><div class="test-role">Academic Writing student · Philippines</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><blockquote>"The vocabulary lessons are addictive! I now use words I never thought I'd know. My IELTS score jumped from 6.5 to 8.0."</blockquote><div class="test-author"><div class="test-avatar" style="background:#5B3D8A">K</div><div><div class="test-name">Kwame Asante</div><div class="test-role">IELTS Prep student · Ghana</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><blockquote>"As a non-native speaker, pronunciation was my biggest fear. The phonics course gave me tools and real confidence I didn't have before."</blockquote><div class="test-author"><div class="test-avatar" style="background:#A0622A">L</div><div><div class="test-name">Linh Nguyen</div><div class="test-role">Phonics student · Vietnam</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★☆</div><blockquote>"The grammar modules are the best I've used. WordWise is the only platform that actually explains the 'why' behind every rule."</blockquote><div class="test-author"><div class="test-avatar" style="background:#C8843A">A</div><div><div class="test-name">Aisha Bello</div><div class="test-role">Grammar student · Nigeria</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><blockquote>"I use WordWise with my students every week. The teacher plan gives me so much control over what they practice. Highly recommended!"</blockquote><div class="test-author"><div class="test-avatar" style="background:#2C6E4A">R</div><div><div class="test-name">Rudi Santoso</div><div class="test-role">English Teacher · Indonesia</div></div></div></div>
+    <div class="test-card reveal"><div class="test-stars">★★★★★</div><blockquote>"I passed my TOEFL with 112 points after 6 weeks of prep on WordWise. The speaking and writing modules were absolute game-changers."</blockquote><div class="test-author"><div class="test-avatar" style="background:#3D6B5C">S</div><div><div class="test-name">Sofia Petrova</div><div class="test-role">TOEFL Prep student · Russia</div></div></div></div>
+  </div>
+</section>
+
+<!-- FAQ + CONTACT -->
+<section class="section" id="faq">
+  <div class="faq-grid">
+    <div>
+      <div class="section-label reveal">✦ FAQ</div>
+      <h2 class="section-title reveal">Common Questions</h2>
+      <p class="section-subtitle reveal">Can't find what you need? Use the contact form.</p>
+      <div class="faq-list">
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Do I need prior English knowledge to start?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Not at all! Our Beginner courses start from the very basics — the alphabet, simple greetings, and foundational grammar. Anyone can begin with WordWise regardless of starting level.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>How long does each lesson take?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Lessons range from 15 to 45 minutes depending on the topic. You can pause, rewind, and revisit any lesson at any time. We recommend at least 20 minutes of daily study for best results.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Can I cancel my subscription anytime?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes! Cancel your Pro or Teacher subscription anytime from your account dashboard. No cancellation fees — you keep access until the end of your current billing period.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Do I get a certificate after completing a course?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes! All Pro and Teacher plan subscribers receive a printable certificate of completion for every finished course. These can be added to your resume or LinkedIn profile.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>Is there a mobile app available?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Our web platform is fully responsive and works beautifully on all mobile browsers. A dedicated iOS and Android app is in development and expected to launch later this year.</div></div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>When are live sessions held?</span><span class="faq-toggle">+</span></button><div class="faq-a"><div class="faq-a-inner">Live sessions are held every Saturday at 10:00 AM GMT via Zoom. Sessions are also recorded and available to replay for 7 days after each class for Pro and Teacher subscribers.</div></div></div>
+      </div>
+    </div>
+    <div id="contact">
+      <div class="contact-form reveal">
+        <h3>Send Us a Message</h3>
+        <p>Have a question not listed above? We typically reply within 24 hours.</p>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="cfname" placeholder="Maria"/></div>
+          <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="clname" placeholder="Santos"/></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input class="form-input" type="email" id="cemail" placeholder="you@example.com"/></div>
+        <div class="form-group"><label>Topic</label>
+          <select class="form-input form-select" id="ctopic">
+            <option value="">Select a topic...</option>
+            <option>Course question</option><option>Billing &amp; subscription</option><option>Technical issue</option><option>Teacher plan</option><option>Partnership</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea class="form-input form-textarea" id="cmsg" placeholder="Tell us how we can help..."></textarea></div>
+        <button class="btn-primary" style="width:100%" onclick="submitContact()">Send Message →</button>
+        <div class="form-success" id="csuccess"><span>✓</span> Message sent! We'll reply within 24 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div style="position:relative;z-index:1">
+    <div class="section-label">✦ Begin Your Journey</div>
+    <h2>Start Writing Your <em>Story</em> in English</h2>
+    <p>Join over 2,400 students already learning with WordWise. Your first course is completely free.</p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" id="ctaEmail" placeholder="Enter your email address"/>
+      <button class="btn-primary" onclick="ctaSignup()">Get Started Free</button>
+    </div>
+    <div class="cta-success" id="ctaOk">🎉 You're on the list! Check your inbox for your welcome email.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo">Word<span>Wise</span></div>
+      <p>A thoughtfully designed English education platform helping learners at every stage communicate with confidence and clarity.</p>
+      <div class="footer-social">
+        <div class="social-btn" onclick="toast('Facebook','Visit us at facebook.com/wordwise')">f</div>
+        <div class="social-btn" onclick="toast('Instagram','Follow @wordwise on Instagram')">ig</div>
+        <div class="social-btn" onclick="toast('YouTube','Subscribe to our YouTube channel')">▶</div>
+        <div class="social-btn" onclick="toast('Twitter/X','Follow @wordwise on X')">𝕏</div>
+      </div>
+    </div>
+    <div class="footer-col"><h6>Courses</h6><ul>
+      <li><a onclick="openCourse('foundations')">English Foundations</a></li>
+      <li><a onclick="openCourse('phonics')">Phonics &amp; Pronunciation</a></li>
+      <li><a onclick="openCourse('grammar')">Grammar Deep Dive</a></li>
+      <li><a onclick="openCourse('writing')">Academic Writing</a></li>
+      <li><a onclick="openCourse('ielts')">IELTS / TOEFL Prep</a></li>
+    </ul></div>
+    <div class="footer-col"><h6>Resources</h6><ul>
+      <li><a onclick="navGo('lessons')">Free Lessons</a></li>
+      <li><a onclick="navGo('lessons')">Word of the Day</a></li>
+      <li><a onclick="toast('Grammar Guide','Launching next month — stay tuned!')">Grammar Guide</a></li>
+      <li><a onclick="toast('Reading List','Curated reading list coming soon.')">Reading List</a></li>
+      <li><a onclick="toast('Writing Tips','Subscribe to our newsletter for weekly writing tips.')">Writing Tips</a></li>
+    </ul></div>
+    <div class="footer-col"><h6>Company</h6><ul>
+      <li><a onclick="navGo('testimonials')">About Us</a></li>
+      <li><a onclick="navGo('pricing')">Pricing</a></li>
+      <li><a onclick="navGo('faq')">FAQ</a></li>
+      <li><a onclick="navGo('contact')">Contact Us</a></li>
+      <li><a onclick="toast('Privacy Policy','We never sell your data. Privacy first.')">Privacy Policy</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 WordWise Academy. All rights reserved.</span><span>Made with ♥ for English learners everywhere</span></div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal" onclick="bgClose(event,'authModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    <div class="modal-logo">Word<span>Wise</span></div>
+    <h2 id="authTitle">Welcome Back</h2>
+    <p class="sub" id="authSub">Sign in to continue your learning journey.</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Log In</button>
+      <button class="modal-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="modal-form active" id="loginForm">
+      <div class="form-group"><label>Email</label><input class="form-input" type="email" id="liEmail" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label>
+        <div class="pw-wrap"><input class="form-input" type="password" id="liPw" placeholder="Your password" style="padding-right:2.5rem"/><button class="toggle-pw" onclick="tpw('liPw',this)">👁</button></div>
+        <span class="forgot-link" onclick="toast('Password Reset','A reset link has been sent to your email.')">Forgot password?</span>
+      </div>
+      <button class="btn-primary modal-submit" onclick="doLogin()">Log In →</button>
+      <div class="modal-divider"><span>or</span></div>
+      <div style="display:flex;gap:.8rem">
+        <button class="btn-ghost" style="flex:1;padding:.7rem" onclick="toast('Google','Redirecting to Google sign-in...')">🔵 Google</button>
+        <button class="btn-ghost" style="flex:1;padding:.7rem" onclick="toast('Facebook','Redirecting to Facebook sign-in...')">🔷 Facebook</button>
+      </div>
+      <p class="modal-note">No account? <a onclick="switchTab('signup')">Sign up free →</a></p>
+    </div>
+    <div class="modal-form" id="signupForm">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="suFn" placeholder="Maria"/></div>
+        <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="suLn" placeholder="Santos"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input class="form-input" type="email" id="suEm" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label>
+        <div class="pw-wrap"><input class="form-input" type="password" id="suPw" placeholder="Min. 8 characters" style="padding-right:2.5rem"/><button class="toggle-pw" onclick="tpw('suPw',this)">👁</button></div>
+      </div>
+      <div class="form-group"><label>English Level</label>
+        <select class="form-input form-select" id="suLv">
+          <option value="">Select your level...</option>
+          <option>Complete Beginner</option><option>Beginner (A1–A2)</option><option>Intermediate (B1–B2)</option><option>Advanced (C1–C2)</option>
+        </select>
+      </div>
+      <button class="btn-primary modal-submit" onclick="doSignup()">Create Free Account →</button>
+      <p class="modal-note">Already have an account? <a onclick="switchTab('login')">Log in →</a></p>
+      <p class="modal-note">By signing up you agree to our <a>Terms</a> &amp; <a>Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE MODAL -->
+<div class="modal-overlay course-modal" id="courseModal" onclick="bgClose(event,'courseModal')">
+  <div class="modal"><button class="modal-close" onclick="closeModal('courseModal')">✕</button><div id="cModalBody"></div></div>
+</div>
+
+<script>
+// ── DATA ──
+const COURSES={
+  foundations:{icon:'🔤',level:'Beginner',levelClass:'level-beginner',title:'English Foundations',desc:'Master the alphabet, basic grammar rules, and everyday vocabulary. Perfect for absolute beginners starting their English journey.',longDesc:'The perfect starting point for anyone new to English. Build strong foundations with the alphabet, phonics, basic grammar, and essential everyday vocabulary that will carry you through every future lesson.',lessons:24,hours:12,students:890,price:'Free',color:'#2C4A3E',syllabus:['The Alphabet & Sounds','Greetings & Introductions','Nouns & Articles','Basic Verbs — To Be & To Have','Numbers, Colors & Shapes','Simple Present Tense','Everyday Vocabulary — Home & Family','Simple Questions & Answers']},
+  phonics:{icon:'🗣️',level:'Beginner',levelClass:'level-beginner',title:'Phonics & Pronunciation',desc:'Learn to correctly sound out words, understand phonemes, and speak with natural rhythm and confidence.',longDesc:'Master the sounds of English and speak with natural rhythm and confidence. Learn how phonemes work, how to blend sounds correctly, and the patterns that make English pronunciation more predictable.',lessons:18,hours:9,students:620,price:'Free',color:'#2C6E4A',syllabus:['Vowel Sounds & Short Vowels','Long Vowel Patterns','Consonant Blends & Digraphs','Silent Letters','Word Stress & Rhythm','Intonation & Sentence Stress','Minimal Pairs Practice','Connected Speech & Linking']},
+  grammar:{icon:'✍️',level:'Intermediate',levelClass:'level-intermediate',title:'Grammar Deep Dive',desc:'Go beyond the basics — tenses, clauses, conjunctions, and sentence structure explored in depth.',longDesc:'Go well beyond the basics. Explore complex tenses, clause types, conjunctions, and sentence structures. This course transforms shaky grammar into a solid foundation for all writing and speaking.',lessons:32,hours:18,students:1140,price:'$19/month',color:'#A0622A',syllabus:['Simple vs. Compound Sentences','All 12 Tenses Reviewed','Subordinate Clauses','Conditionals (0, 1st, 2nd, 3rd)','Passive Voice','Reported Speech','Modal Verbs Deep Dive','Common Grammar Errors & Fixes']},
+  reading:{icon:'📖',level:'Intermediate',levelClass:'level-intermediate',title:'Reading Comprehension',desc:'Develop strategies to understand complex texts, infer meaning, and identify key ideas at a glance.',longDesc:'Learn powerful reading strategies used by fluent English readers: skimming, scanning, inferencing, and identifying main ideas versus supporting details. Works with a wide range of authentic texts.',lessons:20,hours:10,students:780,price:'$19/month',color:'#5B3D8A',syllabus:['Skimming & Scanning','Identifying Main Idea','Inference & Implication','Vocabulary in Context','Text Types & Structures','Critical Reading Skills','Speed Reading Techniques','Practice with Authentic Texts']},
+  writing:{icon:'🖊️',level:'Advanced',levelClass:'level-advanced',title:'Academic Writing',desc:'Craft well-structured essays, research papers, and academic reports with precise, authoritative language.',longDesc:'Craft polished essays, research papers, and academic reports that impress. Learn to structure arguments, use academic vocabulary, cite sources, and write with precision and authority.',lessons:28,hours:22,students:540,price:'$29/month',color:'#2C4A3E',syllabus:['Essay Structure & Planning','Writing Strong Introductions','Body Paragraphs & Evidence','Conclusions That Resonate','Academic Vocabulary & Style','Citing Sources (APA & MLA)','Avoiding Plagiarism','Editing & Proofreading']},
+  ielts:{icon:'🎓',level:'Advanced',levelClass:'level-advanced',title:'IELTS / TOEFL Prep',desc:'Targeted practice for all four skills: Listening, Reading, Writing, and Speaking — proven to raise scores.',longDesc:'Comprehensive preparation for IELTS (Academic & General) and TOEFL iBT exams. Targeted practice for all four sections with full mock tests, timed drills, and expert feedback on written responses.',lessons:40,hours:30,students:960,price:'$39/month',color:'#1A3329',syllabus:['IELTS Reading Strategies','IELTS Listening Tips','Writing Task 1 — Graphs & Charts','Writing Task 2 — Essay Types','Speaking Parts 1, 2 & 3','TOEFL Integrated Writing','TOEFL Speaking','Full Mock Exam & Review']}
+};
+const LESSONS=[
+  {tag:'📖 Lesson 01',title:'Parts of Speech',intro:'Every English sentence is built from 8 essential building blocks. Click each card to reveal a usage example.',vocab:[{w:'Noun',d:'A person, place, thing, or idea',ex:'The teacher wrote on the board.'},{w:'Verb',d:'An action or state of being',ex:'She runs every morning.'},{w:'Adjective',d:'Describes or modifies a noun',ex:'The bright sun warmed the room.'},{w:'Adverb',d:'Modifies a verb, adjective, or another adverb',ex:'He spoke very clearly.'}],quiz:{q:'Which word is the NOUN in: "The curious student read the book carefully."',opts:['curious','read','student','carefully'],ans:2,exp:'Student names the person — it is the noun.'}},
+  {tag:'📖 Lesson 02',title:'Sentence Structure',intro:'Every correct English sentence needs three things. Click each card to learn the role it plays.',vocab:[{w:'Subject',d:'Who or what performs the action',ex:'Maria studies every day.'},{w:'Predicate',d:'What the subject does or is',ex:'The rain fell heavily.'},{w:'Object',d:'Receives the action of the verb',ex:'She ate an apple.'},{w:'Clause',d:'A group of words with subject + verb',ex:'Although it was cold, she swam.'}],quiz:{q:'Identify the SUBJECT in: "The old library on the hill closed last year."',opts:['on the hill','closed','last year','The old library'],ans:3,exp:'The old library on the hill is the full subject — who the sentence is about.'}},
+  {tag:'📖 Lesson 03',title:'Verb Tenses',intro:'English has 12 verb tenses. Click each card to see how and when it is used.',vocab:[{w:'Simple Past',d:'Completed action at a specific past time',ex:'She visited Paris last summer.'},{w:'Present Perfect',d:'Past action with present relevance',ex:'He has lived here for 5 years.'},{w:'Past Continuous',d:'Ongoing action at a past moment',ex:'We were eating when she called.'},{w:'Future Simple',d:'Action that will happen in the future',ex:'They will travel tomorrow.'}],quiz:{q:'Which tense is used in: "I have been studying English for two years."',opts:['Simple Past','Present Perfect Continuous','Past Simple','Future Perfect'],ans:1,exp:'Have been studying is Present Perfect Continuous — started in the past, continuing now.'}},
+  {tag:'📖 Lesson 04',title:'Advanced Vocabulary',intro:'Knowing word roots unlocks hundreds of new words instantly. Click each card to explore.',vocab:[{w:'Bene-',d:"Latin root meaning 'good' or 'well'",ex:'Benefit, benevolent, benefactor.'},{w:'-Logy',d:"Greek suffix meaning 'the study of'",ex:'Biology, psychology, geology.'},{w:'Trans-',d:"Prefix meaning 'across' or 'through'",ex:'Transport, translate, transcribe.'},{w:'Mis-',d:"Prefix meaning 'wrong' or 'badly'",ex:'Misread, misunderstand, misspell.'}],quiz:{q:"What does 'Benevolent' most likely mean?",opts:['Harmful or dangerous','Kind and well-meaning','Sad or depressed','Brave and courageous'],ans:1,exp:"Bene (good) + vol (will) = someone with goodwill toward others."}},
+  {tag:'📖 Lesson 05',title:'Essay Writing Skills',intro:'A well-structured essay has three clear parts. Click each card to understand its purpose.',vocab:[{w:'Introduction',d:'Hook, background, and thesis statement',ex:'Begin with a question, fact, or striking quote.'},{w:'Body Paragraph',d:'Topic sentence, evidence, analysis',ex:'Each paragraph = one main idea.'},{w:'Conclusion',d:'Restate thesis and close with impact',ex:'Leave the reader with something to think about.'},{w:'Thesis',d:'Your central argument in one clear sentence',ex:"'Social media harms teen mental health.'"}],quiz:{q:'What is the PRIMARY purpose of a conclusion paragraph?',opts:['To introduce new evidence','To repeat the introduction word for word','To restate the thesis and close with impact','To list all the sources used'],ans:2,exp:'The conclusion restates your thesis in fresh words and leaves a strong final impression.'}},
+];
+const WORDS=[
+  {w:'Eloquent',p:'/ˈel.ə.kwənt/',d:'(adj.) fluent and persuasive in speaking or writing. "She delivered an eloquent speech."'},
+  {w:'Concise',p:'/kənˈsaɪs/',d:'(adj.) giving a lot of information clearly in few words. "His concise summary saved us an hour."'},
+  {w:'Ambiguous',p:'/æmˈbɪɡ.ju.əs/',d:'(adj.) open to more than one interpretation. "The ambiguous headline confused readers."'},
+  {w:'Articulate',p:'/ɑːˈtɪk.jə.lɪt/',d:'(adj.) able to express ideas clearly. "An articulate writer can explain anything."'},
+  {w:'Cogent',p:'/ˈkoʊ.dʒənt/',d:'(adj.) clear, logical, and convincing. "She made a cogent argument for the new policy."'},
+  {w:'Erudite',p:'/ˈer.jʊ.daɪt/',d:'(adj.) having or showing great knowledge. "The erudite professor lectured for hours."'},
+  {w:'Lucid',p:'/ˈluː.sɪd/',d:'(adj.) expressed clearly and easy to understand. "Her explanation was lucid and precise."'},
+  {w:'Verbose',p:'/vɜːˈboʊs/',d:'(adj.) using more words than necessary. "His verbose essay could be half the length."'},
+];
+let wodI=0,quizDone=false,curLesson=0;
+
+// ── BUILD COURSES ──
+function buildCourses(){
+  const g=document.getElementById('coursesGrid');
+  g.innerHTML=Object.entries(COURSES).map(([k,c])=>`
+    <div class="course-card reveal" onclick="openCourse('${k}')">
+      <div class="course-icon">${c.icon}</div>
+      <span class="course-level ${c.levelClass}">${c.level}</span>
+      <h3>${c.title}</h3>
+      <p>${c.desc}</p>
+      <div class="course-meta"><span>📚 ${c.lessons} lessons</span><span>⏱ ${c.hours} hrs</span><span>👥 ${c.students.toLocaleString()}</span></div>
+      <button class="course-enroll${c.price==='Free'?' free':''}" onclick="event.stopPropagation();enroll('${c.title}','${c.price}')">${c.price==='Free'?'Enroll Free':'Enroll — '+c.price}</button>
+    </div>
+  `).join('');
+}
+
+// ── BUILD LESSON LIST ──
+function buildLessonList(){
+  const l=document.getElementById('lessonList');
+  l.innerHTML=LESSONS.map((ls,i)=>`
+    <div class="lesson-item${i===0?' active':''}" id="li${i}" onclick="switchLesson(${i})">
+      <span class="lesson-num">0${i+1}</span>
+      <div class="lesson-info"><h5>${ls.title}</h5><p>${ls.vocab[0].d.slice(0,40)}...</p></div>
+      <span class="lesson-duration">${[20,25,35,30,40][i]} min</span>
+    </div>
+  `).join('');
+  renderLesson(0);
+}
+
+// ── RENDER LESSON ──
+function renderLesson(idx){
+  const l=LESSONS[idx]; quizDone=false;
+  document.getElementById('lessonPreview').innerHTML=`
+    <span class="preview-tag">${l.tag}</span>
+    <div class="preview-title">${l.title}</div>
+    <p style="font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:.5rem">${l.intro}</p>
+    <div class="vocab-grid">${l.vocab.map(v=>`
+      <div class="vocab-item" onclick="this.classList.toggle('expanded')">
+        <div class="vocab-word">${v.w}</div>
+        <div class="vocab-def">${v.d}</div>
+        <div class="vocab-example">💡 ${v.ex}</div>
+      </div>`).join('')}</div>
+    <div class="quiz-section">
+      <div class="quiz-label">✏️ Quick Quiz — click your answer</div>
+      <div class="quiz-q">${l.quiz.q}</div>
+      <div class="quiz-options">${l.quiz.opts.map((o,i)=>`<button class="quiz-opt" onclick="checkAns(${i},${l.quiz.ans},'${l.quiz.exp.replace(/'/g,"\\'")}',this)">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+      <div class="quiz-feedback" id="qfb"></div>
+      <button class="quiz-next" id="qnxt" onclick="nextLesson()">Next Lesson →</button>
+    </div>`;
+}
+function switchLesson(idx){
+  document.querySelectorAll('.lesson-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('li'+idx).classList.add('active');
+  curLesson=idx; renderLesson(idx);
+}
+function checkAns(chosen,correct,exp,btn){
+  if(quizDone)return; quizDone=true;
+  document.querySelectorAll('.quiz-opt').forEach((o,i)=>{o.disabled=true;if(i===correct)o.classList.add('correct');});
+  if(chosen!==correct)btn.classList.add('wrong');
+  const fb=document.getElementById('qfb');
+  fb.textContent=(chosen===correct?'✓ Correct! ':'✗ Not quite. ')+exp;
+  fb.className='quiz-feedback show '+(chosen===correct?'correct':'wrong');
+  document.getElementById('qnxt').classList.add('show');
+}
+function nextLesson(){
+  const n=(curLesson+1)%LESSONS.length;
+  switchLesson(n);
+  document.getElementById('lessons').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── WORD OF DAY ──
+function nextWord(){
+  wodI=(wodI+1)%WORDS.length;
+  const w=WORDS[wodI];
+  document.getElementById('wodWord').textContent=w.w;
+  document.getElementById('wodPhon').textContent=w.p;
+  document.getElementById('wodDef').textContent=w.d;
+}
+
+// ── COURSE MODAL ──
+function openCourse(key){
+  const c=COURSES[key];
+  document.getElementById('cModalBody').innerHTML=`
+    <div class="course-modal-hdr" style="background:${c.color}">
+      <div class="cmd-tag">${c.icon} ${c.level} Course</div>
+      <div class="cmd-title">${c.title}</div>
+      <div class="cmd-meta"><span>📚 ${c.lessons} lessons</span><span>⏱ ${c.hours} hours</span><span>👥 ${c.students.toLocaleString()} students</span><span>💰 ${c.price}</span></div>
+    </div>
+    <p style="font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem">${c.longDesc}</p>
+    <div style="font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem">Course Progress</div>
+    <div class="progress-bar"><div class="progress-fill" id="pf"></div></div>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:1.2rem">0 of ${c.lessons} lessons completed</p>
+    <div style="font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.7rem">What You'll Learn</div>
+    <ul class="syllabus">${c.syllabus.map((s,i)=>`<li><span class="syllabus-num">Week ${i+1}</span>${s}</li>`).join('')}</ul>
+    <button class="btn-primary" style="width:100%;margin-top:.5rem" onclick="enroll('${c.title}','${c.price}');closeModal('courseModal')">${c.price==='Free'?'Enroll for Free →':'Enroll — '+c.price+' →'}</button>
+  `;
+  document.getElementById('courseModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>{const p=document.getElementById('pf');if(p)p.style.width='0%'},50);
+}
+
+// ── AUTH MODAL ──
+function openAuth(tab){
+  document.getElementById('authModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  switchTab(tab);
+}
+function switchTab(tab){
+  const isL=tab==='login';
+  document.getElementById('tabLogin').classList.toggle('active',isL);
+  document.getElementById('tabSignup').classList.toggle('active',!isL);
+  document.getElementById('loginForm').classList.toggle('active',isL);
+  document.getElementById('signupForm').classList.toggle('active',!isL);
+  document.getElementById('authTitle').textContent=isL?'Welcome Back':'Join WordWise Free';
+  document.getElementById('authSub').textContent=isL?'Sign in to continue your learning journey.':'Create your account and start learning today.';
+}
+function doLogin(){
+  const e=document.getElementById('liEmail').value.trim(),p=document.getElementById('liPw').value;
+  if(!e||!p){document.getElementById('liEmail').style.animation='shake .3s';setTimeout(()=>document.getElementById('liEmail').style.animation='',400);return;}
+  closeModal('authModal');toast('Welcome back! 👋','You have successfully logged in to WordWise.');
+}
+function doSignup(){
+  const n=document.getElementById('suFn').value.trim(),e=document.getElementById('suEm').value.trim(),p=document.getElementById('suPw').value;
+  if(!n||!e||!p){document.getElementById('suEm').style.animation='shake .3s';setTimeout(()=>document.getElementById('suEm').style.animation='',400);return;}
+  closeModal('authModal');toast('Account Created! 🎉','Welcome to WordWise, '+n+'! Your free courses are ready.');
+}
+function tpw(id,btn){const el=document.getElementById(id);el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'👁':'🙈';}
+function enroll(name,price){if(price==='Free'){toast('Enrolled! 🎉','You are now in '+name+'. Let\'s start learning!');}else{openAuth('signup');}}
+
+// ── CLOSE MODALS ──
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function bgClose(e,id){if(e.target===document.getElementById(id))closeModal(id);}
+
+// ── FAQ ──
+function toggleFaq(btn){
+  const item=btn.parentElement,ans=btn.nextElementSibling,isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight='0';});
+  if(!isOpen){item.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px';}
+}
+
+// ── CONTACT ──
+function submitContact(){
+  const n=document.getElementById('cfname').value.trim(),e=document.getElementById('cemail').value.trim(),m=document.getElementById('cmsg').value.trim();
+  if(!n||!e||!m){toast('⚠️ Missing fields','Please fill in name, email, and message.');return;}
+  document.getElementById('csuccess').classList.add('show');
+  toast('Message Sent! ✓','We will reply to '+e+' within 24 hours.');
+  ['cfname','clname','cemail','cmsg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ctopic').value='';
+}
+
+// ── CTA ──
+function ctaSignup(){
+  const e=document.getElementById('ctaEmail').value.trim();
+  if(!e||!e.includes('@')){document.getElementById('ctaEmail').style.borderColor='var(--amber-light)';return;}
+  document.getElementById('ctaOk').classList.add('show');
+  document.getElementById('ctaEmail').value='';
+  toast('You\'re in! 🎉','Welcome email sent to '+e);
+}
+
+// ── TOAST ──
+let tTimer;
+function toast(title,msg){
+  clearTimeout(tTimer);
+  document.getElementById('toastTitle').textContent=title;
+  document.getElementById('toastMsg').textContent=msg;
+  const t=document.getElementById('toast');t.classList.add('show');
+  tTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── SCROLL + REVEAL ──
+function navGo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open');}
+
+function initReveal(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*60);});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded',()=>{
+  buildCourses();
+  buildLessonList();
+  initReveal();
+  window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal('authModal');closeModal('courseModal');document.getElementById('mobileMenu').classList.remove('open');}});
+});
+</script>
+</body>
+</html>
