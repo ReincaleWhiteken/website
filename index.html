@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WordWise — English Learning Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5EFE0;
+      --warm-white: #FDFAF4;
+      --ink: #1A1208;
+      --amber: #C8843A;
+      --amber-light: #E8A85C;
+      --forest: #2C4A3E;
+      --forest-light: #3D6B5C;
+      --blush: #E8D5C4;
+      --muted: #7A6A56;
+      --card-bg: #FFFDF7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--warm-white);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5%;
+      background: rgba(253,250,244,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,132,58,0.15);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--forest);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--amber); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted); font-size: 0.9rem;
+      font-weight: 400; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta {
+      background: var(--forest); color: var(--cream);
+      border: none; padding: 0.65rem 1.5rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      font-weight: 500; cursor: pointer; border-radius: 2px;
+      letter-spacing: 0.04em; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--forest-light); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; padding: 0 5%;
+      padding-top: 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 70% 50%, rgba(200,132,58,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-text { max-width: 580px; animation: fadeUp 0.9s ease both; }
+    .hero-tag {
+      display: inline-block;
+      background: var(--amber); color: #fff;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; margin-bottom: 1.8rem;
+      border-radius: 1px;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.02em; margin-bottom: 1.5rem;
+      color: var(--ink);
+    }
+    .hero h1 em {
+      font-style: italic; color: var(--amber);
+    }
+    .hero p {
+      font-size: 1.05rem; line-height: 1.75;
+      color: var(--muted); max-width: 460px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--amber); color: #fff;
+      padding: 0.9rem 2rem; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      font-weight: 500; cursor: pointer; border-radius: 2px;
+      letter-spacing: 0.03em; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,132,58,0.3); }
+    .btn-ghost {
+      background: transparent; color: var(--forest);
+      padding: 0.9rem 2rem; border: 1.5px solid var(--forest);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      font-weight: 500; cursor: pointer; border-radius: 2px;
+      letter-spacing: 0.03em; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-ghost:hover { background: var(--forest); color: var(--cream); }
+
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative; height: 540px;
+      animation: fadeUp 0.9s 0.2s ease both;
+    }
+    .book-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(200,132,58,0.2);
+      border-radius: 4px; padding: 2rem;
+      box-shadow: 0 20px 60px rgba(26,18,8,0.1);
+      max-width: 320px; width: 100%;
+      position: relative;
+    }
+    .book-card::before {
+      content: '❝';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem; line-height: 1;
+      color: var(--amber); opacity: 0.2;
+      position: absolute; top: 0.5rem; left: 1rem;
+    }
+    .book-card blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.15rem;
+      line-height: 1.65; color: var(--ink);
+      margin-bottom: 1rem; padding-top: 1.5rem;
+    }
+    .book-card cite {
+      font-size: 0.8rem; color: var(--muted);
+      letter-spacing: 0.05em; font-style: normal;
+    }
+    .floating-badge {
+      position: absolute;
+      background: var(--forest); color: var(--cream);
+      padding: 0.8rem 1.2rem; border-radius: 3px;
+      font-size: 0.78rem; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(44,74,62,0.3);
+    }
+    .badge-1 { top: 80px; right: -20px; animation: float 4s ease-in-out infinite; }
+    .badge-2 { bottom: 100px; left: -30px; animation: float 4s 1.5s ease-in-out infinite; }
+    .badge-num { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; display: block; }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: var(--forest); color: var(--cream);
+      padding: 0.8rem 0; overflow: hidden;
+    }
+    .ticker-inner {
+      display: flex; gap: 4rem;
+      animation: ticker 22s linear infinite;
+      white-space: nowrap;
+    }
+    .ticker-item {
+      font-size: 0.8rem; letter-spacing: 0.08em;
+      text-transform: uppercase; font-weight: 400;
+    }
+    .ticker-dot { color: var(--amber-light); margin-right: 4rem; }
+
+    /* ── COURSES ── */
+    .section { padding: 6rem 5%; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--amber); margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; line-height: 1.15;
+      letter-spacing: -0.01em; margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      color: var(--muted); font-size: 1rem;
+      line-height: 1.7; max-width: 500px;
+      margin-bottom: 3.5rem;
+    }
+
+    .courses-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .course-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(200,132,58,0.15);
+      border-radius: 3px; padding: 2rem;
+      transition: all 0.3s; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .course-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 3px; background: var(--amber);
+      transition: width 0.3s;
+    }
+    .course-card:hover { box-shadow: 0 12px 40px rgba(26,18,8,0.1); transform: translateY(-4px); }
+    .course-card:hover::after { width: 100%; }
+    .course-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .course-level {
+      display: inline-block; font-size: 0.68rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 500; padding: 0.25rem 0.7rem;
+      border-radius: 1px; margin-bottom: 0.8rem;
+    }
+    .level-beginner { background: #E8F4EC; color: #2C6E4A; }
+    .level-intermediate { background: #FEF3E4; color: #A0622A; }
+    .level-advanced { background: #EDE8F5; color: #5B3D8A; }
+    .course-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      margin-bottom: 0.6rem; line-height: 1.3;
+    }
+    .course-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+    .course-meta { display: flex; gap: 1rem; font-size: 0.78rem; color: var(--muted); }
+    .course-meta span::before { margin-right: 0.3rem; }
+
+    /* ── FEATURES ── */
+    .features { background: var(--forest); padding: 6rem 5%; }
+    .features .section-label { color: var(--amber-light); }
+    .features .section-title { color: var(--cream); }
+    .features .section-subtitle { color: rgba(245,239,224,0.6); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+    .feature-item { padding: 1.5rem 0; border-top: 1px solid rgba(245,239,224,0.15); }
+    .feature-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 900;
+      color: var(--amber); opacity: 0.5; line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .feature-item h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem; color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .feature-item p { font-size: 0.85rem; color: rgba(245,239,224,0.55); line-height: 1.6; }
+
+    /* ── LESSONS PREVIEW ── */
+    .lessons { padding: 6rem 5%; background: var(--cream); }
+    .lessons-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center; }
+    .lesson-list { display: flex; flex-direction: column; gap: 0; }
+    .lesson-item {
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      padding: 1.2rem 0; border-bottom: 1px solid rgba(26,18,8,0.08);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .lesson-item:hover .lesson-num { color: var(--amber); }
+    .lesson-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--muted); min-width: 28px;
+      transition: color 0.2s;
+    }
+    .lesson-info h5 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem; margin-bottom: 0.3rem;
+    }
+    .lesson-info p { font-size: 0.82rem; color: var(--muted); }
+    .lesson-duration { margin-left: auto; font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+
+    .lesson-preview {
+      background: var(--card-bg); border-radius: 4px;
+      padding: 2.5rem; border: 1px solid rgba(200,132,58,0.15);
+      box-shadow: 0 20px 60px rgba(26,18,8,0.08);
+    }
+    .preview-tag {
+      background: var(--amber); color: #fff;
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 500;
+      padding: 0.3rem 0.8rem; border-radius: 1px;
+      display: inline-block; margin-bottom: 1rem;
+    }
+    .preview-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      margin-bottom: 1rem; line-height: 1.3;
+    }
+    .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1.5rem 0; }
+    .vocab-item {
+      background: var(--cream); border-radius: 2px;
+      padding: 0.8rem; border-left: 3px solid var(--amber);
+    }
+    .vocab-word { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+    .vocab-def { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; font-style: italic; }
+    .fill-blank {
+      background: var(--cream); border-radius: 2px;
+      padding: 1.2rem; border: 1px solid rgba(200,132,58,0.2);
+      margin-top: 1rem;
+    }
+    .fill-blank p { font-size: 0.88rem; line-height: 1.8; }
+    .blank {
+      display: inline-block; width: 80px; height: 1px;
+      background: var(--amber); vertical-align: middle;
+      margin: 0 4px;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { padding: 6rem 5%; }
+    .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+    .test-card {
+      background: var(--card-bg); border: 1px solid rgba(200,132,58,0.12);
+      border-radius: 3px; padding: 2rem;
+    }
+    .test-stars { color: var(--amber); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    .test-card blockquote {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 1rem; line-height: 1.7; margin-bottom: 1.2rem; color: var(--ink);
+    }
+    .test-author { display: flex; align-items: center; gap: 0.8rem; }
+    .test-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--forest); color: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700;
+    }
+    .test-name { font-size: 0.85rem; font-weight: 500; }
+    .test-role { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--forest) 0%, #1A3329 100%);
+      padding: 7rem 5%; text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,132,58,0.12) 0%, transparent 70%);
+    }
+    .cta-section .section-label { color: var(--amber-light); }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 900; color: var(--cream);
+      line-height: 1.1; margin-bottom: 1.2rem;
+    }
+    .cta-section h2 em { font-style: italic; color: var(--amber-light); }
+    .cta-section p { color: rgba(245,239,224,0.6); max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .cta-form { display: flex; gap: 1rem; max-width: 440px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .cta-input {
+      flex: 1; min-width: 220px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(245,239,224,0.25);
+      color: var(--cream); padding: 0.9rem 1.2rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      border-radius: 2px; outline: none;
+    }
+    .cta-input::placeholder { color: rgba(245,239,224,0.4); }
+    .cta-input:focus { border-color: var(--amber-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: var(--cream);
+      padding: 4rem 5% 2rem;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand p { font-size: 0.85rem; color: rgba(245,239,224,0.5); line-height: 1.7; margin-top: 0.8rem; max-width: 260px; }
+    .footer-col h6 { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--amber); margin-bottom: 1rem; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col a { color: rgba(245,239,224,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--cream); }
+    .footer-bottom { border-top: 1px solid rgba(245,239,224,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(245,239,224,0.35); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 100px; }
+      .hero-visual { display: none; }
+      .lessons-layout { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      nav .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Word<span>Wise</span></div>
+  <ul class="nav-links">
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#lessons">Lessons</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <button class="nav-cta">Start Free Trial</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <span class="hero-tag">✦ English Language Academy</span>
+    <h1>Learn English with <em>Confidence</em> & Clarity</h1>
+    <p>From grammar foundations to advanced writing, WordWise helps you speak, read, and write English beautifully — at your own pace.</p>
+    <div class="hero-btns">
+      <a href="#courses" class="btn-primary">Explore Courses →</a>
+      <a href="#lessons" class="btn-ghost">Preview a Lesson</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="book-card">
+      <blockquote>
+        "The limits of my language mean the limits of my world."
+      </blockquote>
+      <cite>— Ludwig Wittgenstein</cite>
+    </div>
+    <div class="floating-badge badge-1">
+      <span class="badge-num">2,400+</span>
+      Active learners
+    </div>
+    <div class="floating-badge badge-2">
+      <span class="badge-num">98%</span>
+      Satisfaction rate
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Grammar Mastery <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Creative Writing <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Phonics & Pronunciation <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Vocabulary Building <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Reading Comprehension <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">IELTS Preparation <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Business English <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Grammar Mastery <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Creative Writing <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Phonics & Pronunciation <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Vocabulary Building <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Reading Comprehension <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">IELTS Preparation <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Business English <span class="ticker-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- COURSES -->
+<section class="section" id="courses">
+  <div class="section-label">✦ What We Offer</div>
+  <h2 class="section-title">Courses for Every Level</h2>
+  <p class="section-subtitle">Whether you're just starting out or polishing your prose, we have a course perfectly suited for you.</p>
+  <div class="courses-grid">
+    <div class="course-card">
+      <div class="course-icon">🔤</div>
+      <span class="course-level level-beginner">Beginner</span>
+      <h3>English Foundations</h3>
+      <p>Master the alphabet, basic grammar rules, and everyday vocabulary. Perfect for absolute beginners.</p>
+      <div class="course-meta">
+        <span>📚 24 lessons</span>
+        <span>⏱ 12 hours</span>
+        <span>🆓 Free</span>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-icon">📝</div>
+      <span class="course-level level-beginner">Beginner</span>
+      <h3>Phonics & Pronunciation</h3>
+      <p>Learn how to correctly sound out words, understand phonemes, and speak with natural rhythm.</p>
+      <div class="course-meta">
+        <span>📚 18 lessons</span>
+        <span>⏱ 9 hours</span>
+        <span>🆓 Free</span>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-icon">✍️</div>
+      <span class="course-level level-intermediate">Intermediate</span>
+      <h3>Grammar Deep Dive</h3>
+      <p>Go beyond the basics — tenses, clauses, conjunctions, and sentence structure explored in depth.</p>
+      <div class="course-meta">
+        <span>📚 32 lessons</span>
+        <span>⏱ 18 hours</span>
+        <span>💰 Paid</span>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-icon">📖</div>
+      <span class="course-level level-intermediate">Intermediate</span>
+      <h3>Reading Comprehension</h3>
+      <p>Develop strategies to understand complex texts, infer meaning, and identify key ideas.</p>
+      <div class="course-meta">
+        <span>📚 20 lessons</span>
+        <span>⏱ 10 hours</span>
+        <span>💰 Paid</span>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-icon">🖊️</div>
+      <span class="course-level level-advanced">Advanced</span>
+      <h3>Academic Writing</h3>
+      <p>Craft well-structured essays, research papers, and academic reports with precise language.</p>
+      <div class="course-meta">
+        <span>📚 28 lessons</span>
+        <span>⏱ 22 hours</span>
+        <span>💰 Paid</span>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="course-icon">🎓</div>
+      <span class="course-level level-advanced">Advanced</span>
+      <h3>IELTS / TOEFL Prep</h3>
+      <p>Targeted practice for all four skills: Listening, Reading, Writing, and Speaking for exams.</p>
+      <div class="course-meta">
+        <span>📚 40 lessons</span>
+        <span>⏱ 30 hours</span>
+        <span>💰 Paid</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="about">
+  <div class="section-label">✦ Why WordWise</div>
+  <h2 class="section-title" style="color:var(--cream)">Built for Serious Learners</h2>
+  <p class="section-subtitle">Our approach combines proven linguistics research with modern, engaging learning design.</p>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-num">01</div>
+      <h4>Expert-Designed Curriculum</h4>
+      <p>Content crafted by certified English language educators with 10+ years of teaching experience.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">02</div>
+      <h4>Interactive Exercises</h4>
+      <p>Fill-in-the-blank, drag-and-drop, and speaking exercises that reinforce every concept.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">03</div>
+      <h4>Progress Tracking</h4>
+      <p>Clear dashboards show your streak, accuracy score, and areas that need more attention.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-num">04</div>
+      <h4>Community & Feedback</h4>
+      <p>Submit writing for peer feedback and join weekly live sessions with our instructors.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LESSONS PREVIEW -->
+<section class="lessons" id="lessons">
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-bottom:3rem;">
+    <div>
+      <div class="section-label">✦ Sample Lesson</div>
+      <h2 class="section-title">See How We Teach</h2>
+    </div>
+    <a href="#" class="btn-ghost">View All Lessons →</a>
+  </div>
+  <div class="lessons-layout">
+    <div class="lesson-list">
+      <div class="lesson-item">
+        <span class="lesson-num">01</span>
+        <div class="lesson-info">
+          <h5>Parts of Speech</h5>
+          <p>Nouns, verbs, adjectives, adverbs explained</p>
+        </div>
+        <span class="lesson-duration">20 min</span>
+      </div>
+      <div class="lesson-item">
+        <span class="lesson-num">02</span>
+        <div class="lesson-info">
+          <h5>Sentence Structure</h5>
+          <p>Subject, predicate, and object patterns</p>
+        </div>
+        <span class="lesson-duration">25 min</span>
+      </div>
+      <div class="lesson-item">
+        <span class="lesson-num">03</span>
+        <div class="lesson-info">
+          <h5>Tenses Deep Dive</h5>
+          <p>Present, past, future and their perfect forms</p>
+        </div>
+        <span class="lesson-duration">35 min</span>
+      </div>
+      <div class="lesson-item">
+        <span class="lesson-num">04</span>
+        <div class="lesson-info">
+          <h5>Advanced Vocabulary</h5>
+          <p>Roots, prefixes, suffixes, and context clues</p>
+        </div>
+        <span class="lesson-duration">30 min</span>
+      </div>
+      <div class="lesson-item">
+        <span class="lesson-num">05</span>
+        <div class="lesson-info">
+          <h5>Essay Writing Skills</h5>
+          <p>Introduction, body paragraphs, conclusion</p>
+        </div>
+        <span class="lesson-duration">40 min</span>
+      </div>
+    </div>
+
+    <div class="lesson-preview">
+      <span class="preview-tag">📖 Lesson Preview — Vocabulary</span>
+      <div class="preview-title">Building Your Word Bank</div>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:1.6;">Learn these 4 powerful words and use them in context. Hover over each to see usage tips.</p>
+      <div class="vocab-grid">
+        <div class="vocab-item">
+          <div class="vocab-word">Eloquent</div>
+          <div class="vocab-def">(adj.) fluent and persuasive in speaking or writing</div>
+        </div>
+        <div class="vocab-item">
+          <div class="vocab-word">Concise</div>
+          <div class="vocab-def">(adj.) giving much information clearly in few words</div>
+        </div>
+        <div class="vocab-item">
+          <div class="vocab-word">Ambiguous</div>
+          <div class="vocab-def">(adj.) open to more than one interpretation</div>
+        </div>
+        <div class="vocab-item">
+          <div class="vocab-word">Articulate</div>
+          <div class="vocab-def">(adj.) able to express ideas clearly and effectively</div>
+        </div>
+      </div>
+      <div class="fill-blank">
+        <p style="font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--amber);margin-bottom:0.5rem;">✏️ Fill in the Blank</p>
+        <p>The professor was so <span class="blank"></span> that even complex theories seemed simple. His <span class="blank"></span> explanations left no room for <span class="blank"></span> meaning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-label">✦ Student Stories</div>
+  <h2 class="section-title">Words from Our Learners</h2>
+  <p class="section-subtitle">Real students sharing how WordWise changed the way they communicate.</p>
+  <div class="test-grid">
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <blockquote>"I went from barely writing a paragraph to submitting a full academic essay in just 3 months. The structured approach really works."</blockquote>
+      <div class="test-author">
+        <div class="test-avatar">M</div>
+        <div>
+          <div class="test-name">Maria Santos</div>
+          <div class="test-role">Academic Writing student</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <blockquote>"The vocabulary lessons are addictive! I now use words I never thought I'd know. My IELTS score jumped from 6.5 to 8.0."</blockquote>
+      <div class="test-author">
+        <div class="test-avatar">K</div>
+        <div>
+          <div class="test-name">Kwame Asante</div>
+          <div class="test-role">IELTS Prep student</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <div class="test-stars">★★★★★</div>
+      <blockquote>"As a non-native speaker, pronunciation was my biggest fear. The phonics course gave me tools and real confidence I didn't have before."</blockquote>
+      <div class="test-author">
+        <div class="test-avatar">L</div>
+        <div>
+          <div class="test-name">Linh Nguyen</div>
+          <div class="test-role">Phonics & Pronunciation student</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div style="position:relative;z-index:1;">
+    <div class="section-label">✦ Begin Your Journey</div>
+    <h2>Start Writing Your <em>Story</em> in English</h2>
+    <p>Join over 2,400 students already learning with WordWise. Your first course is completely free.</p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" placeholder="Enter your email address"/>
+      <button class="btn-primary">Get Started Free</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size:1.3rem;">Word<span>Wise</span></div>
+      <p>A thoughtfully designed English education platform helping learners at every stage communicate with confidence and clarity.</p>
+    </div>
+    <div class="footer-col">
+      <h6>Courses</h6>
+      <ul>
+        <li><a href="#">Beginners</a></li>
+        <li><a href="#">Intermediate</a></li>
+        <li><a href="#">Advanced</a></li>
+        <li><a href="#">IELTS Prep</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>Resources</h6>
+      <ul>
+        <li><a href="#">Grammar Guide</a></li>
+        <li><a href="#">Word of the Day</a></li>
+        <li><a href="#">Reading List</a></li>
+        <li><a href="#">Writing Tips</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h6>Company</h6>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Teachers</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 WordWise Academy. All rights reserved.</span>
+    <span>Privacy · Terms · Sitemap</span>
+  </div>
+</footer>
+
+</body>
+</html>
